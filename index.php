@@ -3,10 +3,20 @@ header("Access-Control-Allow-Origin: *");
 header("content-type:text/html;charset=utf-8");
 $request_type = $_SERVER['REQUEST_METHOD'];
 
-if($request_type == 'GET'){
+if($_SERVER['REQUEST_URI'] == '/'){
     header("Location: index.html");
     exit();
 }
+if($request_type == 'GET'){
+    $_receive = $_GET;
+}else{
+    $_receive = $_POST;
+}
+$key = trim($_receive['key']);
+$key = empty($key) ? '' : $key;
+$page = trim($_receive['page']);
+$page = empty($page) ? 1 : $page;
+$page_size = 18;
 
 /*读取excel文件，并进行相应处理*/
 $fileName = "财务计划.xlsx";
@@ -38,7 +48,28 @@ for ($row = 2; $row <= $rowCount; $row++){
     //var_dump($dataArr);
     //$dataArr = NULL;
 }
+$_data_len = count($dataArr);
+$_count = floor($_data_len/$page_size);
+$_count = $_data_len%$page_size > 0 ? $_count+1 : $_count;
+if($page == $_count ){
+    if($page == 1){
+        $_new_list = $dataArr;
+    }else{
+        $_new_list = array_slice($dataArr,($page-1)*$page_size-1);
+    }
+}else{
+    if($page == 1){
+        $_new_list = array_slice($dataArr,0,$page_size);
+    }else{
+        $_new_list = array_slice($dataArr,($page-1)*$page_size-1,$page_size);
+    }
+}
 $_res['code'] = 1;
-$_res['data'] = $dataArr;
+$_res['current'] = $page;
+$_res['count'] = $_count;
+if($key){
+    $_res['key'] = $key;
+}
+$_res['data'] = $_new_list;
 print_r(json_encode($_res));
 ?>
