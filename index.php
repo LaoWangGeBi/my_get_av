@@ -89,6 +89,22 @@ if($page == $_count ){
         $_new_list = array_slice($dataArr,($page-1)*$page_size-1,$page_size);
     }
 }
+$_data_len = count($dataArr);
+$_count = floor($_data_len/$page_size);
+$_count = $_data_len%$page_size > 0 ? $_count+1 : $_count;
+if($page == $_count ){
+    if($page == 1){
+        $_new_list = $dataArr;
+    }else{
+        $_new_list = array_slice($dataArr,($page-1)*$page_size-1);
+    }
+}else{
+    if($page == 1){
+        $_new_list = array_slice($dataArr,0,$page_size);
+    }else{
+        $_new_list = array_slice($dataArr,($page-1)*$page_size-1,$page_size);
+    }
+}
 $_res['code'] = 1;
 $_res['current'] = $page;
 $_res['count'] = $_count;

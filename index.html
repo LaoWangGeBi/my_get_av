@@ -185,12 +185,17 @@ function ThisDataObj(){
 var _html = '';
 var _this_val = new ThisDataObj();
 _this_val._init();
+<<<<<<< HEAD
 var _search_str = '?page='+_this_val._current;
 if(_this_val._key != ''){
     _search_str += '&key='+_this_val._key;
 }
 new AjaxGo({
 	url:'index.php'+_search_str,
+=======
+new AjaxGo({
+	url:'index.php?page='+_this_val._current,
+>>>>>>> 53d2fa0cee5d44f413e20ba20f661f2a569062e0
 	type:'get',
 	success:function(obj,data){
 		data = JSON.parse(data);
@@ -198,7 +203,11 @@ new AjaxGo({
         _this_val._count = data.count;
         _this_val._current = data.current;
 		for(k of data.data){
+<<<<<<< HEAD
 			_html+='<li class="li loading"><a title="'+k['A']+'" href="'+k['G']+'" target="_blank"><div class="imgBox"><img data-src="'+k['H']+'" alt="Image" /></div><p class="title">'+k['A']+'</p><p>'+k['B']+'</p></a><div class="des">'+k['C']+k['D']+'</div><a href="'+k['J']+'">'+k['J']+'</a></li>';
+=======
+			_html+='<li class="li loading"><a title="'+k['A']+'" href="'+k['G']+'" tank="_blank"><div class="imgBox"><img data-src="'+k['H']+'" alt="Image" /></div><p class="title">'+k['A']+'</p><p>'+k['B']+'</p></a><div class="des">'+k['C']+k['D']+'</div><a href="'+k['J']+'">'+k['J']+'</a></li>';
+>>>>>>> 53d2fa0cee5d44f413e20ba20f661f2a569062e0
         }
         _this_val._init();
         _this_val._getPages();
