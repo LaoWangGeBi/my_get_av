@@ -35,22 +35,47 @@ $dataArr = array();
 $tmp_obj = NULL;
 /* 循环读取每个单元格的数据 */
 //行数循环
-for ($row = 2; $row <= $rowCount; $row++){
-    //列数循环 , 列数是以A列开始
-    for ($column = 'A'; $column <= $columnCount; $column++) {
-        $tmp_obj[$column] = $objPHPExcel->getActiveSheet()->getCell($column.$row)->getValue();
+if($key != ''){
+    for ($row = 2; $row <= $rowCount; $row++){
+        //列数循环 , 列数是以A列开始
+        $iftrue = false;
+        for ($column = 'A'; $column <= $columnCount; $column++) {
+            $tmp_obj[$column] = $objPHPExcel->getActiveSheet()->getCell($column.$row)->getValue();
+            if(!$iftrue){
+                $iftrue = stripos($objPHPExcel->getActiveSheet()->getCell($column.$row)->getValue(),$key);
+            }
+        }
+        if($iftrue != false){
+            $dataArr[] = $tmp_obj;
+        }
+        $tmp_obj = NULL;
+        // echo "<br/>消耗的内存为：".(memory_get_peak_usage(true) / 1024 / 1024)."M";
+        // $endTime = time();
+        // echo "<div>解析完后，当前的时间为：".date("Y-m-d H:i:s")."总共消耗的时间为：".(($endTime - $startTime))."秒</div>";
+        //var_dump($dataArr);
+        //$dataArr = NULL;
     }
-    $dataArr[] = $tmp_obj;
-    $tmp_obj = NULL;
-    // echo "<br/>消耗的内存为：".(memory_get_peak_usage(true) / 1024 / 1024)."M";
-    // $endTime = time();
-    // echo "<div>解析完后，当前的时间为：".date("Y-m-d H:i:s")."总共消耗的时间为：".(($endTime - $startTime))."秒</div>";
-    //var_dump($dataArr);
-    //$dataArr = NULL;
+}else{
+    for ($row = 2; $row <= $rowCount; $row++){
+        //列数循环 , 列数是以A列开始
+        for ($column = 'A'; $column <= $columnCount; $column++) {
+            $tmp_obj[$column] = $objPHPExcel->getActiveSheet()->getCell($column.$row)->getValue();
+        }
+        $dataArr[] = $tmp_obj;
+        $tmp_obj = NULL;
+        // echo "<br/>消耗的内存为：".(memory_get_peak_usage(true) / 1024 / 1024)."M";
+        // $endTime = time();
+        // echo "<div>解析完后，当前的时间为：".date("Y-m-d H:i:s")."总共消耗的时间为：".(($endTime - $startTime))."秒</div>";
+        //var_dump($dataArr);
+        //$dataArr = NULL;
+    }
 }
 $_data_len = count($dataArr);
 $_count = floor($_data_len/$page_size);
 $_count = $_data_len%$page_size > 0 ? $_count+1 : $_count;
+if($page > $_count){
+    $page = 1;
+}
 if($page == $_count ){
     if($page == 1){
         $_new_list = $dataArr;
